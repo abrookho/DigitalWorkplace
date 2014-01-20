@@ -1,0 +1,12 @@
+<Root>
+    <entry>
+        <title ItemNumber="Digital Storage"/>
+        <link>"http://www.gvsu.edu"</link>
+        <summary>"This is a blob of text"</summary>
+    </entry>
+    <entry>
+        <title ItemNumber="Cloud Storage"/>
+        <link>"http://www.wikipedia.org"</link>
+        <summary>"This is another blob of text"</summary>
+    </entry>
+</Root>
