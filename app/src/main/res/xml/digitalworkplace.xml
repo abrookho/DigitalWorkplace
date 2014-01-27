@@ -9,4 +9,13 @@
         <link>"http://www.wikipedia.org"</link>
         <summary>"This is another blob of text"</summary>
     </entry>
+    <entry>
+        <digit ItemNumber="Type of Digital Storage"/>
+    </entry>
+    <entry>
+        <typeo ItemNumber="Hard Drives"/>
+    </entry>
+    <entry>
+        <typeo ItemNumber="Flash Drives"/>
+    </entry>
 </Root>
