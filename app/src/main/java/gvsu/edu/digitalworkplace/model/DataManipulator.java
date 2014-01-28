@@ -9,6 +9,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import gvsu.edu.digitalworkplace.R;
 
@@ -17,14 +18,16 @@ import gvsu.edu.digitalworkplace.R;
  */
 public class DataManipulator{
     private String[] items;
+    private Stack<String> stack;
     public DataManipulator(){
         items = null;
+        stack = new Stack<String>();
     }
 
-    public String[] getItemFromXML(Activity activity, int fileName, String tag) throws XmlPullParserException, IOException {
+    public String[] getItemFromXML(Activity activity, String tag) throws XmlPullParserException, IOException {
         ArrayList<String> XMLitems = new ArrayList<String>();
         Resources res = activity.getResources();
-        XmlResourceParser xpp = res.getXml(fileName);
+        XmlResourceParser xpp = res.getXml(R.xml.digitalworkplace);
         int eventType = xpp.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT){
             if (eventType == XmlPullParser.START_TAG){
@@ -49,5 +52,19 @@ public class DataManipulator{
     public void updateXML(){
         // get code from Mike to update XM
     }
+
+    public boolean stackEmpty(){
+        return stack.empty();
+    }
+
+    public String stackPop(){
+        return stack.pop();
+    }
+
+    public void stackPush(String tag){
+        stack.push(tag);
+    }
+
+
 
 }

@@ -23,43 +23,44 @@ public class ListViewer extends ListActivity{
     private int expandLay;
     private int listLay;
     private ListView listview;
+    private String currentTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.lv);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            items = null;
+            dm = new DataManipulator();
+            expandLay = android.R.layout.simple_expandable_list_item_1;
+            listLay = android.R.layout.simple_list_item_1;
+            listview = (ListView) findViewById(android.R.id.list);
+            // update XML
+            updateXML();
 
-        items = null;
-        dm = new DataManipulator();
-        expandLay = android.R.layout.simple_expandable_list_item_1;
-        listLay = android.R.layout.simple_list_item_1;
-        listview = (ListView) findViewById(R.id.listview);
+            // first display: tag = title
+            updateList("title", false);
+            currentTag = "title";
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        // update XML
-        updateXML();
+                @Override
+                public void onItemClick(AdapterView<?> parent, final View view,
+                                        int position, long id) {
+                    String clicked = (String) parent.getItemAtPosition(position);
+                    String newTag = clicked.replaceAll("\\s+","").toLowerCase();
+                    if(newTag.length() >= 5){
+                        newTag = newTag.substring(0,5);
+                    }
+                    Boolean expand = false;
+                    if(false){
+                        // have to figure out a way when to have an expanded view
+                        expand = true;
+                    }
+                    dm.stackPush(currentTag);
+                    updateList(newTag, expand);
+                    currentTag = newTag;
 
-        // first display: tag = title
-        updateList("title", false);
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                String clicked = (String) parent.getItemAtPosition(position);
-                String newTag = clicked.replaceAll("\\s+","").toLowerCase();
-                if(newTag.length() >= 5){
-                    newTag = newTag.substring(0,5);
                 }
-                Boolean expand = false;
-                if(false){
-                    // have to figure out a way when to have an expanded view
-                    expand = true;
-                }
-                updateList(newTag, expand);
-
-            }
-        });
+            });
     }
 
     public void setItems(String[] items){
@@ -88,9 +89,8 @@ public class ListViewer extends ListActivity{
 
     public void getData(String tag){
         //pick file based off tag
-        int f = R.xml.digitalworkplace;
         try{
-        setItems(dm.getItemFromXML(this, f, tag));
+        setItems(dm.getItemFromXML(this, tag));
         } catch (Exception e){
             // do something
         }
@@ -116,6 +116,18 @@ public class ListViewer extends ListActivity{
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(dm.stackEmpty()){
+            super.onBackPressed();
+        }
+        else{
+            String tag = dm.stackPop();
+            Boolean expand = false; // again need to figure this out
+            updateList(tag, expand);
+        }
     }
 
     public static class PlaceholderFragment extends Fragment {
