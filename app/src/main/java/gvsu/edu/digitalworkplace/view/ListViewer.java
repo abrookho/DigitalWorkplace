@@ -127,7 +127,7 @@ public class ListViewer extends ListActivity{
             String tag = dm.stackPop();
             Boolean expand = false; // again need to figure this out
             updateList(tag, expand);
-        } // hey
+        }
     }
 
     public static class PlaceholderFragment extends Fragment {
