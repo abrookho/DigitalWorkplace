@@ -1,21 +1,37 @@
 <Root>
     <entry>
-        <title ItemNumber="Digital Storage"/>
-        <link>"http://www.gvsu.edu"</link>
-        <summary>"This is a blob of text"</summary>
+        <nav>
+            <title>
+                Digital Storage
+            </title>
+            <exp>
+                What is Digital Storage
+            </exp>
+        </nav>
     </entry>
     <entry>
-        <title ItemNumber="Cloud Storage"/>
-        <link>"http://www.wikipedia.org"</link>
-        <summary>"This is another blob of text"</summary>
+        <nav>
+            <title>
+                Cloud Storage
+            </title>
+            <exp>
+                What is Cloud Storage
+            </exp>
+        </nav>
     </entry>
     <entry>
-        <digit ItemNumber="Type of Digital Storage"/>
+        <digit>
+            Type of Digital Storage
+        </digit>
     </entry>
     <entry>
-        <typeo ItemNumber="Hard Drives"/>
+        <typeo>
+            Hard Drives
+         </typeo>
     </entry>
     <entry>
-        <typeo ItemNumber="Flash Drives"/>
+        <typeo>
+            Flash Drives
+        </typeo>
     </entry>
 </Root>

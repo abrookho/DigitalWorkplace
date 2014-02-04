@@ -1,6 +1,7 @@
 package gvsu.edu.digitalworkplace.view;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ public class ListViewer extends ListActivity{
     private int listLay;
     private ListView listview;
     private String currentTag;
+    private Context con;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +36,17 @@ public class ListViewer extends ListActivity{
             expandLay = android.R.layout.simple_expandable_list_item_1;
             listLay = android.R.layout.simple_list_item_1;
             listview = (ListView) findViewById(android.R.id.list);
-            // update XML
             updateXML();
 
             // first display: tag = title
-            updateList("title", false);
-            currentTag = "title";
+            updateList("nav", false);
+            currentTag = "nav";
             listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, final View view,
                                         int position, long id) {
+                    dm.stackPush(currentTag);
                     String clicked = (String) parent.getItemAtPosition(position);
                     String newTag = clicked.replaceAll("\\s+","").toLowerCase();
                     if(newTag.length() >= 5){
@@ -55,7 +57,6 @@ public class ListViewer extends ListActivity{
                         // have to figure out a way when to have an expanded view
                         expand = true;
                     }
-                    dm.stackPush(currentTag);
                     updateList(newTag, expand);
                     currentTag = newTag;
 
@@ -97,7 +98,7 @@ public class ListViewer extends ListActivity{
     }
 
     public void updateXML(){
-        dm.updateXML();
+        dm.updateXML(this.getApplicationContext());
     }
 
     public void updateList(String tag, Boolean expand){

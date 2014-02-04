@@ -1,6 +1,7 @@
 package gvsu.edu.digitalworkplace.model;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 
@@ -17,40 +18,66 @@ import gvsu.edu.digitalworkplace.R;
  * Created by Adam on 1/23/14.
  */
 public class DataManipulator{
-    private String[] items;
+    private String[] titles;
     private Stack<String> stack;
+    private parsehtml ph;
     public DataManipulator(){
-        items = null;
+        titles = null;
         stack = new Stack<String>();
+        ph = new parsehtml();
     }
 
     public String[] getItemFromXML(Activity activity, String tag) throws XmlPullParserException, IOException {
-        ArrayList<String> XMLitems = new ArrayList<String>();
+        ArrayList<String> XMLTitles = new ArrayList<String>();
+        ArrayList<String> XMLSums = new ArrayList<String>();
         Resources res = activity.getResources();
         XmlResourceParser xpp = res.getXml(R.xml.digitalworkplace);
         int eventType = xpp.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT){
             if (eventType == XmlPullParser.START_TAG){
                 if (xpp.getName().equals(tag)){
-                    XMLitems.add(xpp.getAttributeValue(null, "ItemNumber").toString());
+                    while(xpp.getEventType() != XmlPullParser.TEXT){
+                        xpp.next();
+                    }
+                    XMLTitles.add(xpp.getText().trim());
+                    Boolean broken = false;
+                    while(xpp.getEventType() != XmlPullParser.TEXT){
+                        xpp.next();
+                        if(xpp.getEventType() == XmlPullParser.END_TAG && xpp.getName().equals("entry)")){
+                            broken = true;
+                            break;
+                        }
+                    }
+                    if(!broken)
+                        XMLSums.add(xpp.getText().trim());
                 }
             }
             eventType = xpp.next();
         }
-        items = new String[XMLitems.size()];
-        for(int i = 0; i < items.length; i++){
-            items[i] = XMLitems.get(i);
+        titles = new String[XMLTitles.size()];
+        for(int i = 0; i < titles.length; i++){
+            titles[i] = XMLTitles.get(i);
         }
-        return items;
+        String[] sum = new String[XMLSums.size()];
+        for(int i = 0; i < sum.length; i++){
+            sum[i] = XMLSums.get(i);
+        }
+
+        return titles;
     }
 
     public String[] getItems(){
 
-        return items;
+        return titles;
     }
 
-    public void updateXML(){
-        // get code from Mike to update XM
+    public void updateXML(Context myCon){
+        // find list of urls
+        try{
+         ph.parseNav("http://gvsu.edu/e-hr/recent-case-law-49.htm", myCon);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public boolean stackEmpty(){
