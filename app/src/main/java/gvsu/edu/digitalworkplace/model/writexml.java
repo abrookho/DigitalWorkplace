@@ -1,10 +1,12 @@
 package gvsu.edu.digitalworkplace.model;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlSerializer;
 
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -16,7 +18,8 @@ public class writexml {
 
     public void write(Context con, ArrayList<String> title, ArrayList<String> exp){
         try {
-            FileOutputStream fileos = con.openFileOutput("R.xml.digitalworkplace", Context.MODE_PRIVATE);
+            //FileOutputStream fileos = con.openFileOutput("R.xml.digitalworkplace", Context.MODE_PRIVATE);
+            OutputStream fileos = new FileOutputStream(Environment.getExternalStorageDirectory().getPath()+"/dwp.xml");
             XmlSerializer xmlSerializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
             xmlSerializer.setOutput(writer);

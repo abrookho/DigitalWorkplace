@@ -3,6 +3,7 @@ package gvsu.edu.digitalworkplace.view;
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,9 +12,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import java.net.URL;
 
 import gvsu.edu.digitalworkplace.R;
 import gvsu.edu.digitalworkplace.model.DataManipulator;
+import gvsu.edu.digitalworkplace.model.DownloadFilesTask;
 
 /**
  * Created by Adam on 1/23/14.
@@ -21,6 +26,7 @@ import gvsu.edu.digitalworkplace.model.DataManipulator;
 public class ListViewer extends ListActivity{
     private String[] items;
     private DataManipulator dm;
+    private DownloadFilesTask dft;
     private int expandLay;
     private int listLay;
     private ListView listview;
@@ -33,9 +39,11 @@ public class ListViewer extends ListActivity{
             setContentView(R.layout.activity_main);
             items = null;
             dm = new DataManipulator();
+            int duration = Toast.LENGTH_LONG;
             expandLay = android.R.layout.simple_expandable_list_item_1;
             listLay = android.R.layout.simple_list_item_1;
             listview = (ListView) findViewById(android.R.id.list);
+            Toast toast = Toast.makeText(this.getApplicationContext(), Environment.getExternalStorageDirectory().getPath(),duration);
             updateXML();
 
             // first display: tag = title
@@ -98,7 +106,8 @@ public class ListViewer extends ListActivity{
     }
 
     public void updateXML(){
-        dm.updateXML(this.getApplicationContext());
+        //dm.updateXML(this.getApplicationContext());
+        new DownloadFilesTask(this.getApplicationContext()).execute("http://gvsu.edu/e-hr/recent-case-law-49.htm");
     }
 
     public void updateList(String tag, Boolean expand){
