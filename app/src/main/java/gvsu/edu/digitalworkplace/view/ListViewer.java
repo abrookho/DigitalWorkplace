@@ -107,7 +107,7 @@ public class ListViewer extends ListActivity{
 
     public void updateXML(){
         //dm.updateXML(this.getApplicationContext());
-        new DownloadFilesTask(this.getApplicationContext()).execute("http://gvsu.edu/e-hr/recent-case-law-49.htm");
+        new DownloadFilesTask(this.getApplicationContext()).execute();
     }
 
     public void updateList(String tag, Boolean expand){

@@ -31,7 +31,7 @@ public class parsehtml {
         siteBody = body.toString();
     }
 
-    public void parseArticle(String url) throws IOException{
+    public void parseArticle(String url, Context con) throws IOException{
         setJSOUP(url);
         ArrayList<Integer> indexes = new ArrayList<Integer>();
         ArrayList<String> parts = new ArrayList<String>();
@@ -54,6 +54,8 @@ public class parsehtml {
         }
 
         parts = format(parts);
+
+        xw.write(con, parts);
     }
 
     public void parseNav(String url, Context con) throws IOException{

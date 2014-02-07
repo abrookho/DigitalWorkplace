@@ -3,6 +3,8 @@ package gvsu.edu.digitalworkplace.model;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+
+import java.io.File;
 import java.net.URL;
 
 import java.io.BufferedInputStream;
@@ -10,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLConnection;
+import java.util.Scanner;
 
 import android.content.ContentValues;
 import android.os.Environment;
@@ -43,7 +46,10 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
             //connection.connect();
             //InputStream input = new BufferedInputStream(url.openStream());
             //OutputStream output = new FileOutputStream(Environment.getExternalStorageDirectory().getPath()+"/dwp/dwp.xml");
-
+            File f = new File("R.files.nav");
+            parseFile(f,false,con);
+            f = new File("R.files.article");
+            parseFile(f,true,con);
             ph.parseNav("http://gvsu.edu/e-hr/recent-case-law-49.htm",con);
 
             //byte data[] = new byte[1024];
@@ -73,5 +79,20 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
     protected void onPostExecute(Void result) {
         mProgressDialog.setProgress(100);
         mProgressDialog.dismiss();
+    }
+
+    private void parseFile(File f, Boolean article, Context con){
+        try{
+        Scanner s = new Scanner(f);
+        while(s.hasNext()){
+            if(article){
+                ph.parseArticle(s.next(),con);
+            }
+            else{
+                ph.parseNav(s.next(),con);
+            }
+        }        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
