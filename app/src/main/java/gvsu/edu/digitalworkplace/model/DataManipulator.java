@@ -71,14 +71,6 @@ public class DataManipulator{
         return titles;
     }
 
-    public void updateXML(Context myCon){
-        // find list of urls
-        try{
-         ph.parseNav("http://gvsu.edu/e-hr/recent-case-law-49.htm", myCon);
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-    }
 
     public boolean stackEmpty(){
         return stack.empty();

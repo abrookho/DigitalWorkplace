@@ -1,8 +1,6 @@
 package gvsu.edu.digitalworkplace.model;
 
-        import android.content.Context;
-
-        import java.io.IOException;
+       import java.io.IOException;
         import java.util.ArrayList;
         import org.jsoup.Jsoup;
         import org.jsoup.nodes.Document;
@@ -31,7 +29,7 @@ public class parsehtml {
         siteBody = body.toString();
     }
 
-    public void parseArticle(String url, Context con) throws IOException{
+    public ArrayList<ArrayList<String>> parseArticle(String url) throws IOException{
         setJSOUP(url);
         ArrayList<Integer> indexes = new ArrayList<Integer>();
         ArrayList<String> parts = new ArrayList<String>();
@@ -52,13 +50,14 @@ public class parsehtml {
         for (int i = 0; i < indexes.size() - 1; i++) {
             parts.add(siteBody.substring(indexes.get(i), indexes.get(i + 1)));
         }
-
-        parts = format(parts);
-
-        xw.write(con, parts);
+        ArrayList<ArrayList<String>> yes = new ArrayList<ArrayList<String>>();
+        yes.add(titles);
+        yes.add(format(parts));
+        return yes;
     }
 
-    public void parseNav(String url, Context con) throws IOException{
+
+    public ArrayList<ArrayList<String>> parseNav(String url) throws IOException{
         setJSOUP(url);
         ArrayList<String> links = new ArrayList<String>();
         ArrayList<String> summaries = new ArrayList<String>();
@@ -90,9 +89,10 @@ public class parsehtml {
             links.add(s.substring(0, i));
             summaries.add(s.substring(i));
         }
-        links = format(links);
-        summaries = format(summaries);
-        xw.write(con, links, summaries);
+        ArrayList<ArrayList<String>> yes = new ArrayList<ArrayList<String>>();
+        yes.add(format(links));
+        yes.add(format(summaries));
+        return yes;
     }
 
     public ArrayList<String> format(ArrayList<String> strs){

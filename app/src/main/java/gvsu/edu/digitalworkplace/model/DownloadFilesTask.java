@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import android.content.ContentValues;
@@ -28,6 +29,11 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
     private Context con;
     private ProgressDialog mProgressDialog;
     private parsehtml ph;
+    private ArrayList<ArrayList<String>> objs;
+    private ArrayList<String> links;
+    private ArrayList<String> summaries;
+    private ArrayList<String> art;
+    private ArrayList<String> titles;
 
     public DownloadFilesTask(Context con){
         this.con = con;
@@ -37,34 +43,22 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
         mProgressDialog.setMax(100);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         ph = new parsehtml();
+        objs = null;
+        links = null;
+        summaries = null;
+        art = null;
+        titles = null;
     }
 
     protected Void doInBackground (String... texts) {
+
         try{
-            //URL url = new URL("http://gvsu.edu/e-hr/recent-case-law-49.htm");
-            //URLConnection connection = url.openConnection();
-            //connection.connect();
-            //InputStream input = new BufferedInputStream(url.openStream());
-            //OutputStream output = new FileOutputStream(Environment.getExternalStorageDirectory().getPath()+"/dwp/dwp.xml");
             File f = new File("R.files.nav");
-            parseFile(f,false,con);
+            parseFile(f,false);
             f = new File("R.files.article");
-            parseFile(f,true,con);
-            ph.parseNav("http://gvsu.edu/e-hr/recent-case-law-49.htm",con);
+            parseFile(f,true);
+            //write to xml here
 
-            //byte data[] = new byte[1024];
-            //long total = 0;
-            //int count;
-            //while ((count = input.read(data)) != -1) {
-             //   total +=count;
-             //   publishProgress((int) (total *100));
-
-             //   output.write(data, 0, count);
-            //}
-
-            //output.flush();
-            //output.close();
-            //input.close();
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -81,15 +75,19 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
         mProgressDialog.dismiss();
     }
 
-    private void parseFile(File f, Boolean article, Context con){
+    private void parseFile(File f, Boolean article){
         try{
         Scanner s = new Scanner(f);
         while(s.hasNext()){
             if(article){
-                ph.parseArticle(s.next(),con);
+                objs = ph.parseArticle(s.next());
+                titles = objs.get(0);
+                art = objs.get(1);
             }
             else{
-                ph.parseNav(s.next(),con);
+               objs = ph.parseNav(s.next());
+               links = objs.get(0);
+               summaries = objs.get(1);
             }
         }        } catch(Exception e){
             e.printStackTrace();
