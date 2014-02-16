@@ -69,8 +69,8 @@ public class parsehtml {
         ArrayList<String> full = new ArrayList<String>();
         ArrayList<Integer> indexes = new ArrayList<Integer>();
 
-        siteBody = siteBody.substring(siteBody.indexOf("start here"),
-                siteBody.indexOf("<!--end here"));
+        siteBody = siteBody.substring(siteBody.indexOf("<body>"),
+                siteBody.indexOf("</body>"));
         int count = 0;
         int i = 0;
         do {
@@ -108,9 +108,10 @@ public class parsehtml {
     }
 
     public String downloadLinks() throws IOException{
-        setJSOUP("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/links.txt");
-        String nav = siteBody.substring(siteBody.indexOf("gvsu"),siteBody.indexOf("Art")).trim();
-        String art = siteBody.substring(siteBody.indexOf("gvsu.edu/e-hr/the-importance-of-digital-workplace-12.htm"),siteBody.indexOf("Separate Answer Sheets:")).trim();
+        //setJSOUP("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/links.txt");
+        setJSOUP("https://raw2.github.com/abrookho/DigitalWorkplace/640dd6ac359d3707a1f1fb032945baf2a392eec0/app/src/main/res/xml/Links.txt");
+        String nav = siteBody.substring(siteBody.indexOf("http"),siteBody.indexOf("Art")).trim();
+        String art = siteBody.substring(siteBody.indexOf("http://www.gvsu.edu/e-hr/the-importance-of-digital-workplace-12.htm"),siteBody.indexOf("Separate Answer Sheets:")).trim();
         return nav + "<->" + art;
     }
 }

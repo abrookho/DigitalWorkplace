@@ -59,10 +59,10 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
         try{
             String s =  ph.downloadLinks();
             String str = s.substring(0,s.indexOf("<->"));
-            String[] hey = str.split("\n");
+            String[] hey = str.split(" ");
             parseFile(hey,false);
             s = s.substring(s.indexOf("<->")+3);
-            hey = s.split("\n");
+            hey = s.split(" ");
             parseFile(hey,true);
             //write to xml here
             ArrayList<ArrayList<String>> parts = new ArrayList<ArrayList<String>>();
