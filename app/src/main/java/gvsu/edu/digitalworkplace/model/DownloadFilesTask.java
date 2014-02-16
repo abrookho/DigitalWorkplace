@@ -20,12 +20,13 @@ import android.os.Environment;
 
 import gvsu.edu.digitalworkplace.R;
 import gvsu.edu.digitalworkplace.model.parsehtml;
+import gvsu.edu.digitalworkplace.view.ListViewer;
 
 /**
  * Created by Andrew on 2/4/14.
  */
 
-public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
+public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
     private Context con;
     private ProgressDialog mProgressDialog;
     private parsehtml ph;
@@ -35,10 +36,10 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
     private ArrayList<String> art;
     private ArrayList<String> titles;
     private writexml wx;
+    private Object o;
 
-    public DownloadFilesTask(Context con){
-        this.con = con;
-        mProgressDialog = new ProgressDialog(con);
+    public DownloadFilesTask(ListViewer lv){
+        mProgressDialog = new ProgressDialog(lv.getApplicationContext());
         mProgressDialog.setMessage("Downloading");
         mProgressDialog.setIndeterminate(false);
         mProgressDialog.setMax(100);
@@ -50,10 +51,11 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
         art = null;
         wx = new writexml();
         titles = null;
+        Object o = lv;
     }
 
-    protected Void doInBackground (String... texts) {
-
+    protected Void doInBackground (Context... conn) {
+        this.con = conn[0];
         try{
             String s =  ph.downloadLinks();
             String str = s.substring(0,s.indexOf("<->"));
@@ -84,6 +86,12 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
     protected void onPostExecute(Void result) {
         mProgressDialog.setProgress(100);
         mProgressDialog.dismiss();
+        java.lang.reflect.Method method;
+        try {
+            method = o.getClass().getMethod("updateList", String.class, Boolean.class);
+            method.invoke(o,"nav",false);
+        } catch (Exception e) {
+        }
     }
 
     private void parseFile(String[] str, Boolean article){

@@ -36,6 +36,11 @@ public class ListViewer extends ListActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
             updateXML();
+        try{
+            Thread.sleep(1000);
+        } catch (Exception e){
+
+        }
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
             items = null;
@@ -104,7 +109,7 @@ public class ListViewer extends ListActivity{
     }
 
     public void updateXML(){
-        new DownloadFilesTask(this.getApplicationContext()).execute();
+        new DownloadFilesTask(this).execute(this.getApplicationContext());
     }
 
     public void updateList(String tag, Boolean expand){
