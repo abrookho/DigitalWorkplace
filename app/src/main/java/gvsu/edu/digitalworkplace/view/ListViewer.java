@@ -37,7 +37,7 @@ public class ListViewer extends ListActivity{
     protected void onCreate(Bundle savedInstanceState) {
             updateXML();
         try{
-            Thread.sleep(1000);
+            Thread.sleep(10000);
         } catch (Exception e){
 
         }
