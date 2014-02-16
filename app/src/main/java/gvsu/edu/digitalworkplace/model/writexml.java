@@ -6,6 +6,7 @@ import android.util.Xml;
 
 import org.xmlpull.v1.XmlSerializer;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.FileOutputStream;
@@ -18,7 +19,11 @@ public class writexml {
 
     public void write(Context con, ArrayList<ArrayList<String>> parts){
         try {
-            OutputStream fileos = new FileOutputStream(Environment.getExternalStorageDirectory().getPath()+"/dwp.xml");
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File (sdCard.getAbsolutePath() + "/dw");
+            dir.mkdirs();
+            File file = new File(dir, "dwp.xml");
+            FileOutputStream f = new FileOutputStream(file);
             XmlSerializer xmlSerializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
             xmlSerializer.setOutput(writer);
@@ -49,8 +54,8 @@ public class writexml {
             xmlSerializer.endDocument();
             xmlSerializer.flush();
             String dataWrite=writer.toString();
-            fileos.write(dataWrite.getBytes());
-            fileos.close();
+            f.write(dataWrite.getBytes());
+            f.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

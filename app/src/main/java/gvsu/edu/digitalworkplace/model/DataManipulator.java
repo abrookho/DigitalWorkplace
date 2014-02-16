@@ -45,7 +45,7 @@ public class DataManipulator{
         XmlPullParser xpp = factory.newPullParser();
         // this needs to load the actual file
         File sdcard = Environment.getExternalStorageDirectory();
-        File file = new File(sdcard,"dwp.xml");
+        File file = new File(sdcard,"/dw/dwp.xml");
         xpp.setInput( new BufferedReader(new FileReader(file)));
         int eventType = xpp.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT){

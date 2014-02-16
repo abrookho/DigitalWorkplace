@@ -14,7 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.net.URL;
+import java.util.Scanner;
 
 import gvsu.edu.digitalworkplace.R;
 import gvsu.edu.digitalworkplace.model.DataManipulator;
@@ -35,14 +37,21 @@ public class ListViewer extends ListActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-            updateXML();
-        try{
-            Thread.sleep(10000);
-        } catch (Exception e){
-
-        }
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
+        updateXML();
+        while(true){
+            try{
+                File sdcard = Environment.getExternalStorageDirectory();
+                File file = new File(sdcard,"/dw/dwp.xml");
+                Scanner s = new Scanner(file);
+                if(s.hasNext()){
+                    break;
+                }
+            } catch (Exception e){
+
+            }
+        }
             items = null;
             dm = new DataManipulator();
             expandLay = android.R.layout.simple_expandable_list_item_1;
