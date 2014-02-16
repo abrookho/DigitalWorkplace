@@ -1,7 +1,12 @@
 package gvsu.edu.digitalworkplace.model;
 
+       import android.os.Environment;
+
+       import java.io.FileOutputStream;
        import java.io.IOException;
-        import java.util.ArrayList;
+       import java.io.OutputStream;
+       import java.io.OutputStreamWriter;
+       import java.util.ArrayList;
         import org.jsoup.Jsoup;
         import org.jsoup.nodes.Document;
         import org.jsoup.nodes.Element;
@@ -100,6 +105,13 @@ public class parsehtml {
             s = s.replaceAll("&[^;]*;","").replaceAll("<[^>]*>", "").trim();;
         }
         return strs;
+    }
+
+    public String downloadLinks() throws IOException{
+        setJSOUP("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/links.txt");
+        String nav = siteBody.substring(siteBody.indexOf("gvsu"),siteBody.indexOf("Art")).trim();
+        String art = siteBody.substring(siteBody.indexOf("gvsu.edu/e-hr/the-importance-of-digital-workplace-12.htm"),siteBody.indexOf("Separate Answer Sheets:")).trim();
+        return nav + "<->" + art;
     }
 }
 

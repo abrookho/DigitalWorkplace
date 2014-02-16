@@ -4,11 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.os.Environment;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -30,8 +39,14 @@ public class DataManipulator{
     public String[] getItemFromXML(Activity activity, String tag) throws XmlPullParserException, IOException {
         ArrayList<String> XMLTitles = new ArrayList<String>();
         ArrayList<String> XMLSums = new ArrayList<String>();
-        Resources res = activity.getResources();
-        XmlResourceParser xpp = res.getXml(R.xml.digitalworkplace);
+
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        XmlPullParser xpp = factory.newPullParser();
+        // this needs to load the actual file
+        File sdcard = Environment.getExternalStorageDirectory();
+        File file = new File(sdcard,"dwp.xml");
+        xpp.setInput( new BufferedReader(new FileReader(file)));
         int eventType = xpp.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT){
             if (eventType == XmlPullParser.START_TAG){

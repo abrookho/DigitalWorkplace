@@ -35,16 +35,14 @@ public class ListViewer extends ListActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+            updateXML();
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
             items = null;
             dm = new DataManipulator();
-            int duration = Toast.LENGTH_LONG;
             expandLay = android.R.layout.simple_expandable_list_item_1;
             listLay = android.R.layout.simple_list_item_1;
             listview = (ListView) findViewById(android.R.id.list);
-            Toast toast = Toast.makeText(this.getApplicationContext(), Environment.getExternalStorageDirectory().getPath(),duration);
-            updateXML();
 
             // first display: tag = title
             updateList("nav", false);
@@ -106,7 +104,6 @@ public class ListViewer extends ListActivity{
     }
 
     public void updateXML(){
-        //dm.updateXML(this.getApplicationContext());
         new DownloadFilesTask(this.getApplicationContext()).execute();
     }
 

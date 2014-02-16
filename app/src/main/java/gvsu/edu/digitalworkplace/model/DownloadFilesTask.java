@@ -34,6 +34,7 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
     private ArrayList<String> summaries;
     private ArrayList<String> art;
     private ArrayList<String> titles;
+    private writexml wx;
 
     public DownloadFilesTask(Context con){
         this.con = con;
@@ -47,17 +48,27 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
         links = null;
         summaries = null;
         art = null;
+        wx = new writexml();
         titles = null;
     }
 
     protected Void doInBackground (String... texts) {
 
         try{
-            File f = new File("R.files.nav");
-            parseFile(f,false);
-            f = new File("R.files.article");
-            parseFile(f,true);
+            String s =  ph.downloadLinks();
+            String str = s.substring(0,s.indexOf("<->"));
+            String[] hey = str.split("\n");
+            parseFile(hey,false);
+            s = s.substring(s.indexOf("<->")+3);
+            hey = s.split("\n");
+            parseFile(hey,true);
             //write to xml here
+            ArrayList<ArrayList<String>> parts = new ArrayList<ArrayList<String>>();
+            parts.add(links);
+            parts.add(summaries);
+            parts.add(titles);
+            parts.add(art);
+            wx.write(con, parts);
 
         } catch(Exception e){
             e.printStackTrace();
@@ -75,17 +86,16 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
         mProgressDialog.dismiss();
     }
 
-    private void parseFile(File f, Boolean article){
+    private void parseFile(String[] str, Boolean article){
         try{
-        Scanner s = new Scanner(f);
-        while(s.hasNext()){
+        for(int i = 0; i < str.length; i++){
             if(article){
-                objs = ph.parseArticle(s.next());
+                objs = ph.parseArticle(str[i]);
                 titles = objs.get(0);
                 art = objs.get(1);
             }
             else{
-               objs = ph.parseNav(s.next());
+               objs = ph.parseNav(str[i]);
                links = objs.get(0);
                summaries = objs.get(1);
             }
