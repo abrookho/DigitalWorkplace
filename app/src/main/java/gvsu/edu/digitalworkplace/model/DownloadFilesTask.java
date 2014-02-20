@@ -88,13 +88,13 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
         mProgressDialog.dismiss();
         java.lang.reflect.Method method;
         try {
-            method = o.getClass().getMethod("updateList", String.class, Boolean.class);
+            method = o.getClass().getMethod("updateList", String.class, boolean.class);
             method.invoke(o,"nav",false);
         } catch (Exception e) {
         }
     }
 
-    private void parseFile(String[] str, Boolean article){
+    private void parseFile(String[] str, boolean article){
         try{
         for(int i = 0; i < str.length; i++){
             if(article){

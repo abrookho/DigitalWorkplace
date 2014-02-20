@@ -1,6 +1,7 @@
 package gvsu.edu.digitalworkplace.model;
 
        import android.os.Environment;
+       import android.util.Log;
 
        import java.io.FileOutputStream;
        import java.io.IOException;
@@ -28,10 +29,16 @@ public class parsehtml {
     }
 
     public void setJSOUP(String url) throws IOException{
+        try{
         doc = Jsoup.connect(url).get();
         title = doc.title();
         body = doc.body();
         siteBody = body.toString();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            Log.w("url:",url);
+        }
     }
 
     public ArrayList<ArrayList<String>> parseArticle(String url) throws IOException{
@@ -68,9 +75,9 @@ public class parsehtml {
         ArrayList<String> summaries = new ArrayList<String>();
         ArrayList<String> full = new ArrayList<String>();
         ArrayList<Integer> indexes = new ArrayList<Integer>();
-
-        siteBody = siteBody.substring(siteBody.indexOf("<body>"),
-                siteBody.indexOf("</body>"));
+        try{
+        siteBody = siteBody.substring(siteBody.indexOf("<!--start here-->"),
+                siteBody.indexOf("<!--end here-->"));
         int count = 0;
         int i = 0;
         do {
@@ -90,9 +97,18 @@ public class parsehtml {
         }
 
         for (String s : full) {
-            i = s.indexOf("</strong>");
+            i = 0;
+            if(s.contains("</strong>"))
+                 i = s.indexOf("</strong>");
+            else if(s.contains("</h2>"))
+                i = s.indexOf("</h2>");
             links.add(s.substring(0, i));
             summaries.add(s.substring(i));
+        }
+        } catch (Exception e){
+            Log.w("site:",siteBody);
+            Log.w("URL:", url);
+            e.printStackTrace();
         }
         ArrayList<ArrayList<String>> yes = new ArrayList<ArrayList<String>>();
         yes.add(format(links));
@@ -101,15 +117,18 @@ public class parsehtml {
     }
 
     public ArrayList<String> format(ArrayList<String> strs){
+        ArrayList<String> ret = new ArrayList<String>();
         for (String s : strs) {
-            s = s.replaceAll("&[^;]*;","").replaceAll("<[^>]*>", "").trim();;
+
+            s = s.replaceAll("&[^;]*;","").replaceAll("<[^>]*>", "").trim();
+            ret.add(s);
         }
-        return strs;
+        return ret;
     }
 
     public String downloadLinks() throws IOException{
-        //setJSOUP("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/links.txt");
-        setJSOUP("https://raw2.github.com/abrookho/DigitalWorkplace/640dd6ac359d3707a1f1fb032945baf2a392eec0/app/src/main/res/xml/Links.txt");
+        setJSOUP("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/links.txt");
+        //setJSOUP("https://raw2.github.com/abrookho/DigitalWorkplace/640dd6ac359d3707a1f1fb032945baf2a392eec0/app/src/main/res/xml/Links.txt");
         String nav = siteBody.substring(siteBody.indexOf("http"),siteBody.indexOf("Art")).trim();
         String art = siteBody.substring(siteBody.indexOf("http://www.gvsu.edu/e-hr/the-importance-of-digital-workplace-12.htm"),siteBody.indexOf("Separate Answer Sheets:")).trim();
         return nav + "<->" + art;

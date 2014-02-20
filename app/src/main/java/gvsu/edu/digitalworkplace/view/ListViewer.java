@@ -5,22 +5,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
-
+import android.view.*;
+import android.widget.*;
 import java.io.File;
-import java.net.URL;
 import java.util.Scanner;
 
 import gvsu.edu.digitalworkplace.R;
-import gvsu.edu.digitalworkplace.model.DataManipulator;
-import gvsu.edu.digitalworkplace.model.DownloadFilesTask;
+import gvsu.edu.digitalworkplace.model.*;
 
 /**
  * Created by Adam on 1/23/14.
@@ -31,7 +24,7 @@ public class ListViewer extends ListActivity{
     private DownloadFilesTask dft;
     private int expandLay;
     private int listLay;
-    private ListView listview;
+    private ExpandableListView listview;
     private String currentTag;
     private Context con;
 
@@ -39,6 +32,7 @@ public class ListViewer extends ListActivity{
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
+        try{
         updateXML();
         while(true){
             try{
@@ -49,17 +43,17 @@ public class ListViewer extends ListActivity{
                     break;
                 }
             } catch (Exception e){
-
+                e.printStackTrace();
             }
         }
             items = null;
             dm = new DataManipulator();
             expandLay = android.R.layout.simple_expandable_list_item_1;
             listLay = android.R.layout.simple_list_item_1;
-            listview = (ListView) findViewById(android.R.id.list);
+            listview = (ExpandableListView) findViewById(android.R.id.list);
 
             // first display: tag = title
-            updateList("nav", false);
+            updateList("nav", true);
             currentTag = "nav";
             listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -72,7 +66,7 @@ public class ListViewer extends ListActivity{
                     if(newTag.length() >= 5){
                         newTag = newTag.substring(0,5);
                     }
-                    Boolean expand = false;
+                    Boolean expand = true;
                     if(false){
                         // have to figure out a way when to have an expanded view
                         expand = true;
@@ -82,6 +76,9 @@ public class ListViewer extends ListActivity{
 
                 }
             });
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void setItems(String[] items){
@@ -90,6 +87,16 @@ public class ListViewer extends ListActivity{
 
     public String[] getItems(){
         return this.items;
+    }
+
+    public SparseArray<Group> getSAItem(){
+        SparseArray<Group> sa = new SparseArray<Group>();
+        String[] it = getItems();
+        for(int i = 0; i < it.length; i++){
+            Group g = new Group(it[i]);
+            sa.append(i, g);
+        }
+        return sa;
     }
 
     public void setExpandLay(int i){
@@ -118,13 +125,17 @@ public class ListViewer extends ListActivity{
     }
 
     public void updateXML(){
+        try{
         new DownloadFilesTask(this).execute(this.getApplicationContext());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void updateList(String tag, Boolean expand){
         getData(tag);
         if (expand){
-            listview.setAdapter(new ArrayAdapter<String>(this, getExpandLay(), getItems()));
+            listview.setAdapter(new DWExpandableListAdapter(this,getSAItem()));
         }
         else{
             listview.setAdapter(new ArrayAdapter<String>(this, getListLay(), getItems()));
