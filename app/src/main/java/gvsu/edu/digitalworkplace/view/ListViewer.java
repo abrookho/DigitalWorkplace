@@ -53,8 +53,8 @@ public class ListViewer extends ListActivity{
             listview = (ExpandableListView) findViewById(android.R.id.list);
 
             // first display: tag = title
-            updateList("nav", true);
-            currentTag = "nav";
+            updateList("title", true);  //use to be nav
+            currentTag = "title";
             listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
@@ -120,7 +120,7 @@ public class ListViewer extends ListActivity{
         try{
         setItems(dm.getItemFromXML(this, tag));
         } catch (Exception e){
-            // do something
+            e.printStackTrace();
         }
     }
 

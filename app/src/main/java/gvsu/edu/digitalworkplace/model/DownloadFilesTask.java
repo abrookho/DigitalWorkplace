@@ -35,6 +35,7 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
     private ArrayList<String> summaries;
     private ArrayList<String> art;
     private ArrayList<String> titles;
+    //private ArrayList<String> questions;  //new
     private writexml wx;
     private Object o;
 
@@ -49,6 +50,7 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
         links = null;
         summaries = null;
         art = null;
+        //questions = null;
         wx = new writexml();
         titles = null;
         Object o = lv;
@@ -70,6 +72,7 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
             parts.add(summaries);
             parts.add(titles);
             parts.add(art);
+            //parts.add(questions);  //new
             wx.write(con, parts);
 
         } catch(Exception e){
@@ -91,6 +94,7 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
             method = o.getClass().getMethod("updateList", String.class, boolean.class);
             method.invoke(o,"nav",false);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

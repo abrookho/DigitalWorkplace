@@ -46,10 +46,10 @@ public class parsehtml {
         ArrayList<Integer> indexes = new ArrayList<Integer>();
         ArrayList<String> parts = new ArrayList<String>();
         ArrayList<String> titles = new ArrayList<String>();
-        titles.add("Summary:");
-        titles.add("Questions:");
-        titles.add("Answers:");
-        titles.add("Full Text:");
+        titles.add("Summary");
+        titles.add("Questions");
+        titles.add("Answers");
+        titles.add("Full Text");
         titles.add("Source");
 
         for (String s : titles) {
@@ -127,7 +127,8 @@ public class parsehtml {
     }
 
     public String downloadLinks() throws IOException{
-        setJSOUP("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/links.txt");
+        //setJSOUP("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/links.txt");
+        setJSOUP("http://www.travelers-motel.com/junk/links.txt");
         //setJSOUP("https://raw2.github.com/abrookho/DigitalWorkplace/640dd6ac359d3707a1f1fb032945baf2a392eec0/app/src/main/res/xml/Links.txt");
         String nav = siteBody.substring(siteBody.indexOf("http"),siteBody.indexOf("Art")).trim();
         String art = siteBody.substring(siteBody.indexOf("http://www.gvsu.edu/e-hr/the-importance-of-digital-workplace-12.htm"),siteBody.indexOf("Separate Answer Sheets:")).trim();

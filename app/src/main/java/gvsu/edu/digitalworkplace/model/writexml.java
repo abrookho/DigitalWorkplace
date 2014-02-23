@@ -33,11 +33,14 @@ public class writexml {
             for(int i = 0; i < parts.size()/2; i++){
                 ArrayList<String> title = new ArrayList<String>();
                 ArrayList<String> exp = new ArrayList<String>();
+                //ArrayList<String> quest = new ArrayList<String>();
                 title = parts.get(count);
                 count++;
                 exp = parts.get(count);
                 count++;
-                for(int j = 0; j > title.size(); j++){
+                //quest = parts.get(count);
+                //count++;
+                for(int j = 0; j < title.size(); j++){  //was >
                     xmlSerializer.startTag(null,"entry");
                     xmlSerializer.startTag(null,title.get(i).replaceAll("\\s+","").toLowerCase());
                     xmlSerializer.startTag(null,"title");
@@ -45,6 +48,9 @@ public class writexml {
                     xmlSerializer.endTag(null,"title");
                     xmlSerializer.startTag(null,"exp");
                     xmlSerializer.text(exp.get(i));
+                    //xmlSerializer.startTag(null,"questions");
+                    //xmlSerializer.text(quest.get(i));
+                    //xmlSerializer.endTag(null,"questions");
                     xmlSerializer.endTag(null,"exp");
                     xmlSerializer.endTag(null, title.get(i).replaceAll("\\s+", "").toLowerCase());
                     xmlSerializer.endTag(null, "entry");
