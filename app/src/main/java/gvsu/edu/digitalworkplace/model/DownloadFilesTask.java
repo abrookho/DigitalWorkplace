@@ -17,6 +17,7 @@ import java.util.Scanner;
 
 import android.content.ContentValues;
 import android.os.Environment;
+import android.util.Log;
 
 import gvsu.edu.digitalworkplace.R;
 import gvsu.edu.digitalworkplace.model.parsehtml;
@@ -35,6 +36,7 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
     private ArrayList<String> summaries;
     private ArrayList<String> art;
     private ArrayList<String> titles;
+
     //private ArrayList<String> questions;  //new
     private writexml wx;
     private Object o;
@@ -47,12 +49,12 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         ph = new parsehtml();
         objs = null;
-        links = null;
-        summaries = null;
-        art = null;
+        links = new ArrayList<String>();
+        summaries = new ArrayList<String>();
+        art = new ArrayList<String>();
         //questions = null;
         wx = new writexml();
-        titles = null;
+        titles = new ArrayList<String>();
         Object o = lv;
     }
 
@@ -60,10 +62,11 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
         this.con = conn[0];
         try{
             String s =  ph.downloadLinks();
+            String s2 = s;
             String str = s.substring(0,s.indexOf("<->"));
             String[] hey = str.split(" ");
             parseFile(hey,false);
-            s = s.substring(s.indexOf("<->")+3);
+            s = s2.substring(s2.indexOf("<->")+3);
             hey = s.split(" ");
             parseFile(hey,true);
             //write to xml here
@@ -103,16 +106,21 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
         for(int i = 0; i < str.length; i++){
             if(article){
                 objs = ph.parseArticle(str[i]);
-                titles = objs.get(0);
-                art = objs.get(1);
+                for(int j = 0; j < objs.get(0).size(); j++){
+                    titles.add(objs.get(0).get(j));
+                    Log.w("URL: ", str[i]);
+                    art.add(objs.get(1).get(j));
+                }
             }
             else{
                objs = ph.parseNav(str[i]);
-               links = objs.get(0);
-               summaries = objs.get(1);
+                for(int j = 0; j < objs.get(0).size(); j++){
+                    links.add(objs.get(0).get(j));
+                    summaries.add(objs.get(1).get(j));
+                }
             }
         }        } catch(Exception e){
-            e.printStackTrace();
+                    e.printStackTrace();
         }
     }
 }

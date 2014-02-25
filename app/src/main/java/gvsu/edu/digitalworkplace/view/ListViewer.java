@@ -39,7 +39,7 @@ public class ListViewer extends ListActivity{
                 File sdcard = Environment.getExternalStorageDirectory();
                 File file = new File(sdcard,"/dw/dwp.xml");
                 Scanner s = new Scanner(file);
-                if(s.hasNext()){
+                if(s.hasNext() && s.next().contains("</root>")){
                     break;
                 }
             } catch (Exception e){
