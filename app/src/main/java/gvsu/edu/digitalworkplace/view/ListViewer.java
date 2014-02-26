@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.*;
@@ -34,13 +35,17 @@ public class ListViewer extends ListActivity{
             setContentView(R.layout.activity_main);
         try{
         updateXML();
+            File sdcard = Environment.getExternalStorageDirectory();
+            File file = new File(sdcard,"/dw/dwp.xml");
+            Scanner s = new Scanner(file);
         while(true){
             try{
-                File sdcard = Environment.getExternalStorageDirectory();
-                File file = new File(sdcard,"/dw/dwp.xml");
-                Scanner s = new Scanner(file);
                 if(s.hasNext() && s.next().contains("</root>")){
                     break;
+                }
+                else if (s.hasNext()){
+                    String p = s.next();
+                    Log.w("next:", p);
                 }
             } catch (Exception e){
                 e.printStackTrace();
