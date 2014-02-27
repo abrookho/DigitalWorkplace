@@ -62,11 +62,13 @@ public class parsehtml {
         titles = new ArrayList<String>();
 
         for (int i = 0; i < indexes.size() - 1; i++) {
-            parts.add(siteBody.substring(indexes.get(i), indexes.get(i + 1)));
+            String s = siteBody.substring(indexes.get(i), indexes.get(i + 1));
+            s.substring(s.indexOf(":")+1);
+            parts.add(s);
         }
         ArrayList<ArrayList<String>> yes = new ArrayList<ArrayList<String>>();
         parts = format(parts);
-        for(int i = 0; i < parts.size(); i++){
+         for(int i = 0; i < parts.size(); i++){
             String s = parts.get(i);
             if(s.isEmpty()){
                 parts.remove(i);

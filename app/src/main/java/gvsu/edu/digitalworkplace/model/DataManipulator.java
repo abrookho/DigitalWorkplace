@@ -67,7 +67,9 @@ public class DataManipulator{
                         XMLSums.add(xpp.getText().trim());
                 }
             }
-            eventType = xpp.next();
+            if (xpp != null) {
+                eventType = xpp.next();
+            }
         }
         titles = new String[XMLTitles.size()];
         for(int i = 0; i < titles.length; i++){

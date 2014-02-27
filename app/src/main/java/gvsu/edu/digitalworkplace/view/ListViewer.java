@@ -40,13 +40,11 @@ public class ListViewer extends ListActivity{
             Scanner s = new Scanner(file);
         while(true){
             try{
-                if(s.hasNext() && s.next().contains("</root>")){
-                    break;
-                }
-                else if (s.hasNext()){
-                    String p = s.next();
-                    Log.w("next:", p);
-                }
+               if(s.hasNext() && s.next().contains("</root>"))
+                   break;
+               else if (s.hasNext()){
+                   s.next();
+               }
             } catch (Exception e){
                 e.printStackTrace();
             }

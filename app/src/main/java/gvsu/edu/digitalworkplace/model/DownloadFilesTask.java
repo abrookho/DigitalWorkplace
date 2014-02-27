@@ -39,7 +39,7 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
 
     //private ArrayList<String> questions;  //new
     private writexml wx;
-    private Object o;
+    private ListViewer o;
 
     public DownloadFilesTask(ListViewer lv){
         mProgressDialog = new ProgressDialog(lv.getApplicationContext());
@@ -55,7 +55,7 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
         //questions = null;
         wx = new writexml();
         titles = new ArrayList<String>();
-        Object o = lv;
+        o = lv;
     }
 
     protected Void doInBackground (Context... conn) {
@@ -69,6 +69,7 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
             s = s2.substring(s2.indexOf("<->")+3);
             hey = s.split(" ");
             parseFile(hey,true);
+
             //write to xml here
             ArrayList<ArrayList<String>> parts = new ArrayList<ArrayList<String>>();
             parts.add(links);
@@ -94,8 +95,7 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
         mProgressDialog.dismiss();
         java.lang.reflect.Method method;
         try {
-            method = o.getClass().getMethod("updateList", String.class, boolean.class);
-            method.invoke(o,"nav",false);
+            o.updateList("title",true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -108,7 +108,6 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
                 objs = ph.parseArticle(str[i]);
                 for(int j = 0; j < objs.get(0).size(); j++){
                     titles.add(objs.get(0).get(j));
-                    Log.w("URL: ", str[i]);
                     art.add(objs.get(1).get(j));
                 }
             }
