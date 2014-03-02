@@ -102,18 +102,22 @@ public class writexml {
                     rootElement.appendChild((entry));
 
                     // custom element
-                    Element cus = doc.createElement(title.get(j).replaceAll(" ","").toLowerCase());
-                    entry.appendChild(cus);
+                    String s = title.get(j);
+                    s = s.replaceAll(" ", "");
+                    s = s.toLowerCase();
+                    s = s.replaceAll(":","");
+                    Element cus = doc.createElement(s);
+                        entry.appendChild(cus);
 
-                    // title element for entry
-                    Element titleE = doc.createElement("title");
-                    titleE.appendChild(doc.createTextNode(title.get(j)));
-                    cus.appendChild(titleE);
+                        // title element for entry
+                        Element titleE = doc.createElement("title");
+                        titleE.appendChild(doc.createTextNode(title.get(j)));
+                        cus.appendChild(titleE);
 
-                    // exp element for entry
-                    Element expE = doc.createElement("exp");
-                    expE.appendChild(doc.createTextNode(exp.get(j)));
-                    cus.appendChild(expE);
+                        // exp element for entry
+                        Element expE = doc.createElement("exp");
+                        expE.appendChild(doc.createTextNode(exp.get(j)));
+                        cus.appendChild(expE);
                 }
 
                 // write the content to an xml file
