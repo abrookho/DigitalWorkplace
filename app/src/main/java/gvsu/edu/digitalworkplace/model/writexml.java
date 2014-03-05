@@ -104,13 +104,27 @@ public class writexml {
                     // custom element
                     String s = title.get(j);
                     s = s.replaceAll(" ", "");
-                    s = s.toLowerCase();
-                    s = s.replaceAll(":","");
-                    Element cus = doc.createElement(s);
+                    String b = "";
+                    for (int a = 0; a < s.length(); a++){
+                        if (isXMLIdentifier(s.charAt(a)))
+                            b += s.charAt(a);
+                    }
+                    s = b;
+                    Element cus;
+                    if (i == 0){
+                        cus = doc.createElement("nav");
+                    } else {
+                        if(s.isEmpty() == false)
+                        cus = doc.createElement(s);
+                        else{
+                            cus = doc.createElement("other");
+                        }
+                    }
                         entry.appendChild(cus);
 
                         // title element for entry
-                        Element titleE = doc.createElement("title");
+                        Element titleE;
+                        titleE = doc.createElement("title");
                         titleE.appendChild(doc.createTextNode(title.get(j)));
                         cus.appendChild(titleE);
 
@@ -136,6 +150,10 @@ public class writexml {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isXMLIdentifier(char c){
+        return (((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '_') || (c >= '0' && c <= '9') || (c == '-') || (c == '.')) && c != ':');
     }
  }
 

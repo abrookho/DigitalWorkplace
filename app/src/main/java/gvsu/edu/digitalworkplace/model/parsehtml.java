@@ -142,9 +142,7 @@ public class parsehtml {
     }
 
     public String downloadLinks() throws IOException{
-        //setJSOUP("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/links.txt");
-        setJSOUP("http://www.travelers-motel.com/junk/links2.txt");
-        //setJSOUP("https://raw2.github.com/abrookho/DigitalWorkplace/640dd6ac359d3707a1f1fb032945baf2a392eec0/app/src/main/res/xml/Links.txt");
+        setJSOUP("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/links.txt");
         String nav = siteBody.substring(siteBody.indexOf("http"),siteBody.indexOf("Art")).trim();
         String art = siteBody.substring(siteBody.indexOf("Article:"),siteBody.indexOf("Separate Answer Sheets:")).trim();
         art = art.substring(art.indexOf("http"));

@@ -51,9 +51,13 @@ public class DataManipulator{
         while (eventType != XmlPullParser.END_DOCUMENT){
             if (eventType == XmlPullParser.START_TAG){
                 if (xpp.getName().equals(tag)){
+                    while(xpp.getEventType() != XmlPullParser.START_TAG && xpp.getName().equals("title")){
+                        xpp.next();
+                    }
                     while(xpp.getEventType() != XmlPullParser.TEXT){
                         xpp.next();
                     }
+
                     XMLTitles.add(xpp.getText().trim());
                     Boolean broken = false;
                     while(xpp.getEventType() != XmlPullParser.TEXT){

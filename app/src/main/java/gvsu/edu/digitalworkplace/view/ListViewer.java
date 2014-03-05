@@ -89,8 +89,8 @@ public class ListViewer extends ListActivity{
 
     public void taskDone(){
         // first display: tag = title
-        updateList("title", true);  //use to be nav
-        currentTag = "title";
+        updateList("nav", true);  //use to be nav
+        currentTag = "nav";
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -98,15 +98,24 @@ public class ListViewer extends ListActivity{
                                     int position, long id) {
                 dm.stackPush(currentTag);
                 String clicked = (String) parent.getItemAtPosition(position);
-                String newTag = clicked.replaceAll("\\s+","").toLowerCase();
-                if(newTag.length() >= 5){
-                    newTag = newTag.substring(0,5);
+                String newTag = clicked;
+                newTag = newTag.replaceAll(" ", "");
+                String s = newTag;
+                String b = "";
+                for (int a = 0; a < s.length(); a++){
+                    if (isXMLIdentifier(s.charAt(a)))
+                        b += s.charAt(a);
                 }
-                updateList(newTag, true);
+                s = b;
+                updateList(s, true);
                 currentTag = newTag;
 
             }
         });
+    }
+
+    private boolean isXMLIdentifier(char c){
+        return (((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '_') || (c >= '0' && c <= '9') || (c == '-') || (c == '.')) && c != ':');
     }
 
     public void setItems(String[] items){
