@@ -10,7 +10,12 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.*;
 import android.widget.*;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 import gvsu.edu.digitalworkplace.R;
@@ -22,66 +27,86 @@ import gvsu.edu.digitalworkplace.model.*;
 public class ListViewer extends ListActivity{
     private String[] items;
     private DataManipulator dm;
-    private DownloadFilesTask dft;
     private int expandLay;
     private int listLay;
     private ExpandableListView listview;
     private String currentTag;
-    private Context con;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
-        try{
+        Log.w("now", "starting");
+        items = null;
+        dm = new DataManipulator();
+        expandLay = android.R.layout.simple_expandable_list_item_1;
+        listLay = android.R.layout.simple_list_item_1;
+        listview = (ExpandableListView) findViewById(android.R.id.list);
+        createStatusFile();
         updateXML();
-            File sdcard = Environment.getExternalStorageDirectory();
-            File file = new File(sdcard,"/dw/dwp.xml");
-            Scanner s = new Scanner(file);
+        File stat = new File(Environment.getExternalStorageDirectory()+"/dw/Status.txt");
         while(true){
-            try{
-               if(s.hasNext() && s.next().contains("</root>"))
-                   break;
-               else if (s.hasNext()){
-                   s.next();
-               }
-            } catch (Exception e){
-                e.printStackTrace();
+            StringBuilder text = new StringBuilder();
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(stat));
+                String line;
+                line = br.readLine();
+                text.append(line);
+                if(line.equals("updated")){
+                    Log.w("now","updating");
+                    break;
+                }
+                else{
+                    Log.w("now","reading");
+                    Thread.sleep(1000);
+                }
+            }
+            catch (Exception e) {
+                //You'll need to add proper error handling here
             }
         }
-            items = null;
-            dm = new DataManipulator();
-            expandLay = android.R.layout.simple_expandable_list_item_1;
-            listLay = android.R.layout.simple_list_item_1;
-            listview = (ExpandableListView) findViewById(android.R.id.list);
+        taskDone();
+    }
 
-            // first display: tag = title
-            updateList("title", true);  //use to be nav
-            currentTag = "title";
-            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> parent, final View view,
-                                        int position, long id) {
-                    dm.stackPush(currentTag);
-                    String clicked = (String) parent.getItemAtPosition(position);
-                    String newTag = clicked.replaceAll("\\s+","").toLowerCase();
-                    if(newTag.length() >= 5){
-                        newTag = newTag.substring(0,5);
-                    }
-                    Boolean expand = true;
-                    if(false){
-                        // have to figure out a way when to have an expanded view
-                        expand = true;
-                    }
-                    updateList(newTag, expand);
-                    currentTag = newTag;
-
-                }
-            });
-        } catch(Exception e){
+    public void createStatusFile(){
+        try
+        {
+            File root = new File(Environment.getExternalStorageDirectory(), "dw");
+            if (!root.exists()) {
+                root.mkdirs();
+            }
+            File stat = new File(root, "Status.txt");
+                FileWriter writer = new FileWriter(stat);
+                writer.append("not updated");
+                writer.flush();
+                writer.close();
+        }
+        catch(Exception e)
+        {
             e.printStackTrace();
         }
+    }
+
+    public void taskDone(){
+        // first display: tag = title
+        updateList("title", true);  //use to be nav
+        currentTag = "title";
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                dm.stackPush(currentTag);
+                String clicked = (String) parent.getItemAtPosition(position);
+                String newTag = clicked.replaceAll("\\s+","").toLowerCase();
+                if(newTag.length() >= 5){
+                    newTag = newTag.substring(0,5);
+                }
+                updateList(newTag, true);
+                currentTag = newTag;
+
+            }
+        });
     }
 
     public void setItems(String[] items){
@@ -138,11 +163,12 @@ public class ListViewer extends ListActivity{
     public void updateList(String tag, Boolean expand){
         getData(tag);
         if (expand){
-            listview.setAdapter(new DWExpandableListAdapter(this,getSAItem()));
+            listview.setAdapter(new DWExpandableListAdapter(this, getSAItem()));
         }
         else{
             listview.setAdapter(new ArrayAdapter<String>(this, getListLay(), getItems()));
         }
+        Log.w("now","updated");
 
     }
 

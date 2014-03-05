@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.net.URL;
 
 import java.io.BufferedInputStream;
@@ -77,12 +79,29 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
             parts.add(titles);
             parts.add(art);
             //parts.add(questions);  //new
+            Log.w("now","writing");
             wx.write(con, parts);
-
+            updateFile();
         } catch(Exception e){
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void updateFile(){
+        try{
+            File stat = new File(Environment.getExternalStorageDirectory()+"/dw/Status.txt");
+            PrintWriter writer = new PrintWriter(stat);
+            writer.print("");
+            writer.close();
+
+            FileWriter w = new FileWriter(stat);
+            w.append("updated");
+            w.flush();
+            w.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     protected void onProgressUpdate(Integer... progress) {
@@ -93,12 +112,6 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
     protected void onPostExecute(Void result) {
         mProgressDialog.setProgress(100);
         mProgressDialog.dismiss();
-        java.lang.reflect.Method method;
-        try {
-            o.updateList("title",true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void parseFile(String[] str, boolean article){
