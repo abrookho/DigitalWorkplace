@@ -88,7 +88,7 @@ public class writexml {
             int count = 0;
 
             // transverse parts and get arraylists
-            for(int i = 0; i < parts.size()/2; i++){
+            for(int i = 0; i < 2; i++){
                 ArrayList<String> title = new ArrayList<String>();
                 ArrayList<String> exp = new ArrayList<String>();
                 title = parts.get(count);
@@ -100,22 +100,24 @@ public class writexml {
                     // entry element
                     Element entry = doc.createElement("entry");
                     rootElement.appendChild((entry));
-
-                    // custom element
-                    String s = title.get(j);
-                    s = s.replaceAll(" ", "");
-                    String b = "";
-                    for (int a = 0; a < s.length(); a++){
-                        if (isXMLIdentifier(s.charAt(a)))
-                            b += s.charAt(a);
-                    }
-                    s = b;
                     Element cus;
                     if (i == 0){
                         cus = doc.createElement("nav");
                     } else {
+                        ArrayList<String> tags = parts.get(count);
+
+                        // custom element
+                        String s = tags.get(j);
+                        s = s.replaceAll(" ", "");
+                        String b = "";
+                        for (int a = 0; a < s.length(); a++){
+                            if (isXMLIdentifier(s.charAt(a)))
+                                b += s.charAt(a);
+                        }
+                        s = b;
+
                         if(s.isEmpty() == false)
-                        cus = doc.createElement(s);
+                            cus = doc.createElement(s);
                         else{
                             cus = doc.createElement("other");
                         }

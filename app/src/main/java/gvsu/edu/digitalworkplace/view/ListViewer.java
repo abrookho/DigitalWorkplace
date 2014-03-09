@@ -66,6 +66,27 @@ public class ListViewer extends ListActivity{
             }
         }
         taskDone();
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                dm.stackPush(currentTag);
+                String clicked = (String) parent.getItemAtPosition(position);
+                String newTag = clicked;
+                newTag = newTag.replaceAll(" ", "");
+                String s = newTag;
+                String b = "";
+                for (int a = 0; a < s.length(); a++){
+                    if (isXMLIdentifier(s.charAt(a)))
+                        b += s.charAt(a);
+                }
+                s = b;
+                updateList(s, true);
+                currentTag = newTag;
+            }
+        });
     }
 
     public void createStatusFile(){
@@ -91,27 +112,6 @@ public class ListViewer extends ListActivity{
         // first display: tag = title
         updateList("nav", true);  //use to be nav
         currentTag = "nav";
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                dm.stackPush(currentTag);
-                String clicked = (String) parent.getItemAtPosition(position);
-                String newTag = clicked;
-                newTag = newTag.replaceAll(" ", "");
-                String s = newTag;
-                String b = "";
-                for (int a = 0; a < s.length(); a++){
-                    if (isXMLIdentifier(s.charAt(a)))
-                        b += s.charAt(a);
-                }
-                s = b;
-                updateList(s, true);
-                currentTag = newTag;
-
-            }
-        });
     }
 
     private boolean isXMLIdentifier(char c){

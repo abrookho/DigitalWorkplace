@@ -125,9 +125,13 @@ public class parsehtml {
             Log.w("URL:", url);
             e.printStackTrace();
         }
+
         ArrayList<ArrayList<String>> yes = new ArrayList<ArrayList<String>>();
         yes.add(format(links));
         yes.add(format(summaries));
+        ArrayList<String> t = new ArrayList<String>();
+        t.add(title);
+        yes.add(t);
         return yes;
     }
 
