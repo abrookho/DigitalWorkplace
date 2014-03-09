@@ -28,7 +28,8 @@ public class DWExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return groups.get(groupPosition).children.get(childPosition);
+        Group g = groups.get(groupPosition);
+        return g.getChild();
     }
 
     @Override
@@ -58,7 +59,12 @@ public class DWExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return groups.get(groupPosition).children.size();
+        Group g = groups.get(groupPosition);
+        if (g.getChild().equals("")){
+            return 0;
+        } else {
+            return 1;
+        }
     }
     @Override
     public Object getGroup(int groupPosition) {
@@ -92,7 +98,7 @@ public class DWExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(gvsu.edu.digitalworkplace.R.layout.listrow_group, null);
         }
         Group group = (Group) getGroup(groupPosition);
-        ((CheckedTextView) convertView).setText(group.string);
+        ((CheckedTextView) convertView).setText(group.title);
         ((CheckedTextView) convertView).setChecked(isExpanded);
         return convertView;
     }

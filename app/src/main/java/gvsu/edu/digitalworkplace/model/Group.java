@@ -7,10 +7,19 @@ import java.util.List;
  * Created by Andrew on 2/11/14.
  */
 public class Group {
-    public String string;
-    public final List<String> children = new ArrayList<String>();
+    public String title;
+    public String child;
 
-    public Group(String string) {
-        this.string = string;
+    public Group(String t, String c) {
+        this.title = t;
+        this.child = c;
+    }
+
+    public String getTitle(){
+        return this.title;
+    }
+
+    public String getChild(){
+        return this.child;
     }
 }

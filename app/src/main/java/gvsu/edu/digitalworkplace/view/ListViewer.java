@@ -129,8 +129,9 @@ public class ListViewer extends ListActivity{
     public SparseArray<Group> getSAItem(){
         SparseArray<Group> sa = new SparseArray<Group>();
         String[] it = getItems();
+        String[] child = dm.getSums();
         for(int i = 0; i < it.length; i++){
-            Group g = new Group(it[i]);
+            Group g = new Group(it[i],child[i]);
             sa.append(i, g);
         }
         return sa;
