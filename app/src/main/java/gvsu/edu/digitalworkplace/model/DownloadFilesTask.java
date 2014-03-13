@@ -17,8 +17,6 @@ import android.util.Log;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
-import gvsu.edu.digitalworkplace.old.writexml;
 import gvsu.edu.digitalworkplace.view.ListViewer;
 
 /**
@@ -32,9 +30,6 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
     String title;
     Element body;
     String siteBody;
-
-    //private ArrayList<String> questions;  //new
-    private writexml wx;
     private ListViewer o;
 
     public DownloadFilesTask(ListViewer lv){
