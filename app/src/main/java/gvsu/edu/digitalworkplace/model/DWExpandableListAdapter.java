@@ -9,18 +9,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import gvsu.edu.digitalworkplace.view.ListViewer;
 
 public class DWExpandableListAdapter extends BaseExpandableListAdapter {
 
     private final SparseArray<Group> groups;
     public LayoutInflater inflater;
-    public Activity activity;
+    public ListViewer activity;
 
-    public DWExpandableListAdapter(Activity act, SparseArray<Group> groups) {
+    public DWExpandableListAdapter(ListViewer act, SparseArray<Group> groups) {
         activity = act;
         this.groups = groups;
         inflater = act.getLayoutInflater();
@@ -99,7 +103,15 @@ public class DWExpandableListAdapter extends BaseExpandableListAdapter {
         }
         Group group = (Group) getGroup(groupPosition);
         ((CheckedTextView) convertView).setText(group.title);
+        final String t = group.title;
         ((CheckedTextView) convertView).setChecked(isExpanded);
+        ((ImageButton) convertView).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               activity.btnClicked(t);
+            }
+        });
+
         return convertView;
     }
 

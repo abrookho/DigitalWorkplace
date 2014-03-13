@@ -1,7 +1,6 @@
 package gvsu.edu.digitalworkplace.view;
 
 import android.app.ListActivity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -15,8 +14,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Scanner;
 
 import gvsu.edu.digitalworkplace.R;
 import gvsu.edu.digitalworkplace.model.*;
@@ -31,6 +28,7 @@ public class ListViewer extends ListActivity{
     private int listLay;
     private ExpandableListView listview;
     private String currentTag;
+    private static String start = "whatisdigitalworkplacedatastoragedatatheftmonitoringemployeeslegalissues";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,51 +40,32 @@ public class ListViewer extends ListActivity{
         expandLay = android.R.layout.simple_expandable_list_item_1;
         listLay = android.R.layout.simple_list_item_1;
         listview = (ExpandableListView) findViewById(android.R.id.list);
-        createStatusFile();
-        updateXML();
         File stat = new File(Environment.getExternalStorageDirectory()+"/dw/Status.txt");
-        while(true){
-            StringBuilder text = new StringBuilder();
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(stat));
-                String line;
-                line = br.readLine();
-                text.append(line);
-                if(line.equals("updated")){
-                    Log.w("now","updating");
-                    break;
+        if(true){//stat.exists()== false){
+            createStatusFile();
+            updateXML();
+            while(true){
+                StringBuilder text = new StringBuilder();
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(stat));
+                    String line;
+                    line = br.readLine();
+                    text.append(line);
+                    if(line.equals("updated")){
+                        Log.w("now","updating");
+                        break;
+                    }
+                    else{
+                        Log.w("now","reading");
+                        Thread.sleep(1000);
+                    }
                 }
-                else{
-                    Log.w("now","reading");
-                    Thread.sleep(1000);
+                catch (Exception e) {
+                    e.printStackTrace();
                 }
-            }
-            catch (Exception e) {
-                //You'll need to add proper error handling here
-            }
+             }
         }
         taskDone();
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                dm.stackPush(currentTag);
-                String clicked = (String) parent.getItemAtPosition(position);
-                String newTag = clicked;
-                newTag = newTag.replaceAll(" ", "");
-                String s = newTag;
-                String b = "";
-                for (int a = 0; a < s.length(); a++){
-                    if (isXMLIdentifier(s.charAt(a)))
-                        b += s.charAt(a);
-                }
-                s = b;
-                updateList(s, true);
-                currentTag = newTag;
-            }
-        });
     }
 
     public void createStatusFile(){
@@ -110,8 +89,8 @@ public class ListViewer extends ListActivity{
 
     public void taskDone(){
         // first display: tag = title
-        updateList("nav", true);  //use to be nav
-        currentTag = "nav";
+        updateList(start, true);  //use to be nav
+        currentTag = start;
     }
 
     private boolean isXMLIdentifier(char c){
@@ -164,7 +143,7 @@ public class ListViewer extends ListActivity{
 
     public void updateXML(){
         try{
-        new DownloadFilesTask(this).execute(this.getApplicationContext());
+            new DownloadFilesTask(this).execute(this.getApplicationContext());
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -196,9 +175,24 @@ public class ListViewer extends ListActivity{
         }
         else{
             String tag = dm.stackPop();
-            Boolean expand = false; // again need to figure this out
-            updateList(tag, expand);
+            updateList(tag, true);
         }
+    }
+
+    public void btnClicked(String clicked){
+        dm.stackPush(currentTag);
+        String newTag = clicked;
+        newTag = newTag.replaceAll(" ", "");
+        String s = newTag;
+        String b = "";
+        for (int a = 0; a < s.length(); a++){
+            if (isXMLIdentifier(s.charAt(a)))
+                b += s.charAt(a);
+        }
+        s = b;
+        s = s.toLowerCase();
+        updateList(s, true);
+        currentTag = newTag;
     }
 
     public static class PlaceholderFragment extends Fragment {

@@ -1,16 +1,14 @@
-package gvsu.edu.digitalworkplace.model;
+package gvsu.edu.digitalworkplace.old;
 
-       import android.os.Environment;
        import android.util.Log;
 
-       import java.io.FileOutputStream;
        import java.io.IOException;
-       import java.io.OutputStream;
-       import java.io.OutputStreamWriter;
        import java.util.ArrayList;
         import org.jsoup.Jsoup;
         import org.jsoup.nodes.Document;
         import org.jsoup.nodes.Element;
+
+       import gvsu.edu.digitalworkplace.old.writexml;
 
 public class parsehtml {
 
@@ -80,8 +78,37 @@ public class parsehtml {
         }
         yes.add(titles);
         yes.add(parts);
+        ArrayList<String> t = new ArrayList<String>();
+        t.add(title);
+        yes.add(formatTag(t));
         return yes;
     }
+
+    public ArrayList<String> parseMenu() throws IOException{
+        setJSOUP("http://www.gvsu.edu/e-hr");
+        ArrayList<String> menu = new ArrayList<String>();
+        siteBody = siteBody.substring(siteBody.indexOf("navigation-menu"),siteBody.indexOf("clear", siteBody.indexOf("navigation-menu")));
+        int count = 0;
+        int i = 0;
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        String str = "class=\"navparent\" target=\"\">";
+        do {
+            int k = siteBody.indexOf(str, i + 1);
+            indexes.add(k);
+            i = k;
+            count++;
+        } while (indexes.get(count - 1) != siteBody.lastIndexOf(str));
+
+        for (i = 0; i < indexes.size(); i++) {
+                int k = indexes.get(i);
+                int m = siteBody.indexOf("</a",k);
+                String s = siteBody.substring(k,m);
+                s = s.substring(s.indexOf(">")+1);
+                menu.add(s);
+
+            }
+        return menu;
+        }
 
 
     public ArrayList<ArrayList<String>> parseNav(String url) throws IOException{
@@ -131,8 +158,33 @@ public class parsehtml {
         yes.add(format(summaries));
         ArrayList<String> t = new ArrayList<String>();
         t.add(title);
-        yes.add(t);
+        yes.add(formatTag(t));
         return yes;
+    }
+
+    private ArrayList<String> formatTag(ArrayList<String> tag){
+        ArrayList<String> ret = new ArrayList<String>();
+        for (String s : tag) {
+
+            s = s.replaceAll(" ", "");
+            String b = "";
+            for (int a = 0; a < s.length(); a++){
+                if (isXMLIdentifier(s.charAt(a)))
+                    b += s.charAt(a);
+            }
+            s = b;
+            int index = s.indexOf("-");
+            if(index != -1){
+                s = s.substring(0,index);
+            }
+            s = s.toLowerCase();
+            ret.add(s);
+        }
+        return ret;
+    }
+
+    private boolean isXMLIdentifier(char c){
+        return (((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '_') || (c >= '0' && c <= '9') || (c == '-') || (c == '.')) && c != ':');
     }
 
     public ArrayList<String> format(ArrayList<String> strs){
