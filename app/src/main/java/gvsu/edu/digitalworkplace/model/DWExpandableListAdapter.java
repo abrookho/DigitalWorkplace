@@ -3,16 +3,13 @@ package gvsu.edu.digitalworkplace.model;
 /**
  * Created by Andrew on 2/11/14.
  */
-import android.app.Activity;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +42,7 @@ public class DWExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
         final String children = (String) getChild(groupPosition, childPosition);
-        TextView text = null;
+        TextView text;
         if (convertView == null) {
             convertView = inflater.inflate(gvsu.edu.digitalworkplace.R.layout.listrow_details, null);
         }
@@ -103,15 +100,8 @@ public class DWExpandableListAdapter extends BaseExpandableListAdapter {
         }
         Group group = (Group) getGroup(groupPosition);
         ((CheckedTextView) convertView).setText(group.title);
-        final String t = group.title;
         ((CheckedTextView) convertView).setChecked(isExpanded);
-        ((ImageButton) convertView).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               activity.btnClicked(t);
-            }
-        });
-
+        //activity.btnClicked(t);
         return convertView;
     }
 

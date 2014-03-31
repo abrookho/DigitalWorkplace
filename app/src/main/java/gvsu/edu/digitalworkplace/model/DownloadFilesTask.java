@@ -4,19 +4,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
-
-import java.util.ArrayList;
+import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLConnection;
 
 import android.os.Environment;
-import android.util.Log;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import gvsu.edu.digitalworkplace.view.ListViewer;
 
 /**
@@ -26,10 +25,6 @@ import gvsu.edu.digitalworkplace.view.ListViewer;
 public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
     private Context con;
     private ProgressDialog mProgressDialog;
-    Document doc;
-    String title;
-    Element body;
-    String siteBody;
     private ListViewer o;
 
     public DownloadFilesTask(ListViewer lv){
@@ -38,10 +33,6 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
         mProgressDialog.setIndeterminate(false);
         mProgressDialog.setMax(100);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        doc = null;
-        title = "";
-        body = null;
-        siteBody = "";
     }
 
     protected Void doInBackground (Context... conn) {
@@ -64,36 +55,22 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
         mProgressDialog.dismiss();
     }
 
-    public void createFile(){
+    public void createFile() {
         File sdcard = Environment.getExternalStorageDirectory();
-        File file = new File(sdcard,"/dw/dwp.xml");
+        File file = new File(sdcard, "/dw/dwp.xml");
         try {
-            setJSOUP("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/dwp.xml");
+            URL url = new URL("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/dwp.xml");
 
-            PrintWriter writer = new PrintWriter(file);
-            writer.print("");
-            writer.close();
-
-            FileWriter w = new FileWriter(file);
-            w.append(siteBody);
-            w.flush();
-            w.close();
+                // get the content in bytes
+                String xmlString = getURLContent("http://gvsu.edu/cms3/assets/2D085406-FC80-AE2E-7233BDF30DCE3642/dwp.xml");
+                FileWriter w = new FileWriter(file);
+                w.append(xmlString);
+                w.flush();
+                w.close();
 
             createStatFile();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-    public void setJSOUP(String url) throws IOException {
-        try{
-            doc = Jsoup.connect(url).get();
-            title = doc.title();
-            body = doc.body();
-            siteBody = body.toString();
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            Log.w("url:", url);
         }
     }
 
@@ -111,5 +88,39 @@ public class DownloadFilesTask extends AsyncTask<Context,Integer, Void> {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public String getURLContent(String p_sURL)
+    {
+        URL oURL;
+        URLConnection oConnection;
+        BufferedReader oReader;
+        String sLine;
+        StringBuilder sbResponse;
+        String sResponse = null;
+
+        try
+        {
+            oURL = new URL(p_sURL);
+            oConnection = oURL.openConnection();
+            oReader = new BufferedReader(new InputStreamReader(oConnection.getInputStream()));
+            sbResponse = new StringBuilder();
+
+            while((sLine = oReader.readLine()) != null)
+            {
+                if(sLine.contains("<exp/>")){
+                    sLine.replace("<exp/>","<exp></exp>");
+                }
+                sbResponse.append(sLine);
+            }
+
+            sResponse = sbResponse.toString();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return sResponse;
     }
 }

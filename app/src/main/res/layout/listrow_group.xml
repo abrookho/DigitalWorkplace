@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="40dp"
-android:clickable="true"
-android:orientation="vertical"
-android:paddingLeft="40dp"
-tools:context=".MainActivity" >
-
-    <CheckedTextView
+<CheckedTextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -21,18 +14,3 @@ tools:context=".MainActivity" >
         android:textSize="14sp"
         android:textAlignment="textEnd"
         android:textStyle="bold" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="9dp"
-        android:id="@+id/btnC"
-        android:layout_gravity="center_horizontal"
-        android:layout_toRightOf="@+id/textView1"
-        android:layout_marginLeft="47dp"
-        android:layout_alignParentBottom="true"
-        android:background="@android:drawable/ic_media_play"
-        android:layout_alignParentTop="true"
-        android:clickable="false" />
-
-
-</RelativeLayout>

@@ -28,7 +28,7 @@ public class ListViewer extends ListActivity{
     private int listLay;
     private ExpandableListView listview;
     private String currentTag;
-    private static String start = "whatisdigitalworkplacedatastoragedatatheftmonitoringemployeeslegalissues";
+    private static String start = "start";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class ListViewer extends ListActivity{
         listLay = android.R.layout.simple_list_item_1;
         listview = (ExpandableListView) findViewById(android.R.id.list);
         File stat = new File(Environment.getExternalStorageDirectory()+"/dw/Status.txt");
-        if(true){//stat.exists()== false){
+        if(stat.exists()== false){
             createStatusFile();
             updateXML();
             while(true){
@@ -66,6 +66,13 @@ public class ListViewer extends ListActivity{
              }
         }
         taskDone();
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                 btnClicked(items[position]);
+               return true;
+            }
+        });
     }
 
     public void createStatusFile(){

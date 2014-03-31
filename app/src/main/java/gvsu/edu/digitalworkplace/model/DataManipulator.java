@@ -28,10 +28,6 @@ public class DataManipulator{
     private String[] sum;
     private Stack<String> stack;
     private XmlPullParserFactory pullParserFactory;
-    Document doc;
-    String title;
-    Element body;
-    String siteBody;
     public DataManipulator(){
         stack = new Stack<String>();
         sum = null;
@@ -50,17 +46,20 @@ public class DataManipulator{
         int eventType = parser.getEventType();
 
         while (eventType != XmlPullParser.END_DOCUMENT){
-            String name = null;
             switch (eventType){
                 case XmlPullParser.START_DOCUMENT:
                     break;
                 case XmlPullParser.START_TAG:
-                    name = parser.getName();
-                    if(name.contains(tag)){
+                   String name = parser.getName();
+                    if(tag.equals(name)){
                         parser.next();
                         XMLTitles.add(parser.nextText());
-                        parser.next();
-                        XMLSums.add(parser.nextText());
+                        eventType = parser.next();
+                        if(eventType == XmlPullParser.START_TAG)
+                            XMLSums.add(parser.nextText());
+                        else{
+                            XMLSums.add("");
+                        }
                     }
                     break;
                 case XmlPullParser.END_TAG:
